@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 function Square(props) {
     return (
-        <button className="square"
+        <button className={`square ${props.mark ? 'marked' : ''}`}
             onClick={props.onClick}>
             <span>{props.mark}</span>
         </button>
@@ -31,17 +31,9 @@ class Board extends Component {
         );
     }
 
-    renderPrompt() {
-        const content = this.props.winner;
-        return (
-            <h2 className="info">{content}</h2>
-        )
-    }
-
     render() {
         return (
             <div>
-                {this.renderPrompt()}
                 {this.renderBoard(3)}
             </div>
         )
@@ -68,7 +60,6 @@ export default class Game extends Component {
         const squares = current.squares.slice();
 
         if (calculateWinner(squares) || squares[i]) {
-            console.log("Clicked");
             return;
         }
 
@@ -99,7 +90,8 @@ export default class Game extends Component {
 
     renderHistory() {
         const history = this.state.history.map((squares, index) => {
-            const desc = (index == 0) ? "Start of game" : "Go to move #" + index;
+            if (index === 0) return;
+            const desc = "Go to move #" + index;
             return (
                 <li key={index}>
                     <button onClick={() => this.jumpTo(index)}>{desc}</button>
